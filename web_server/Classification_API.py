@@ -79,7 +79,7 @@ def verify_pwd(username, password):
         "Username":username
     })[0]["Password"]
 
-    if bcrypt.hashpw(password.encode('utf8', hashed_pwd)) != hashed_pwd:
+    if bcrypt.hashpw(password.encode('utf8'), hashed_pwd) != hashed_pwd:
         return False
     else:
         return True
@@ -92,6 +92,8 @@ def verify_credentials(username, password):
     correct_pwd = verify_pwd(username, password)
     if not correct_pwd:
         return generate_ret_dict("Invalid Password", 302), True
+ 
+    return None, False
 
 
 
@@ -145,7 +147,7 @@ class Classify(Resource):
             }
         )
 
-        jsonify(ret_json)
+        return jsonify(ret_json)
 
 class Refill(Resource):
     def post(self):
