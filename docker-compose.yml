@@ -1,24 +1,24 @@
 services:
-  web:
-    build: ./web_server
-    container_name: classification_server
-    ports:
-      - 5000:5000
-    restart: always
-    network_mode: host    
-    depends_on:
-      - db
+  web_server:
+      build: ./web_server
+      container_name: classify_server  
+      ports:
+        - "5000:5000"
+      restart: always    
+      network_mode: host
+      depends_on:
+      	- db
   db:
-    build: ./db
-    container_name: mongo_server
-    restart: always
-    network_mode: host
- 
+      build: ./db
+      container_name: mongo_server
+      restart: always
+      network_mode: host
+    
   nginx:
-    build: ./nginx
-    container_name: nginx_server
-    environment:
-      - SERVER_NAME=0.0.0.0
-    restart: always
-    network_mode: host
+      build: ./nginx
+      container_name: nginx_server
+      environment: 
+        - SERVER_NAME=0.0.0.0
+      restart: always
+      network_mode: host
 
