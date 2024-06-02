@@ -134,8 +134,11 @@ class Classify(Resource):
         ret_json = {}
         for predict in actual_prediction[0]:
             ret_json[predict[1]] = float(predict[2]*100)
+        v, k = max((v, k) for k, v in ret_json.items())
+        ret_json = {
+                k:v
+                }
         
-
         #reduce token
         users.update_one(
             {

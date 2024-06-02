@@ -1,24 +1,37 @@
 services:
   web_server:
-      build: ./web_server
-      container_name: classify_server  
-      ports:
-        - "5000:5000"
-      restart: always    
-      network_mode: host
-      depends_on:
-        - db
+   build: ./web_server
+   container_name: classify_server  
+   ports:
+     - "5000:5000"
+   restart: always    
+   depends_on:
+     - db
+   volumes:
+     - web_server_data:/var/www/html    
   db:
-      build: ./db
-      container_name: mongo_server
-      restart: always
-      network_mode: host
-    
-  nginx:
-      build: ./nginx
-      container_name: nginx_server
-      environment: 
-        - SERVER_NAME=0.0.0.0
-      restart: always
-      network_mode: host
+   build: ./db
+   container_name: mongo_server
+   ports:
+     - "27017:27017"   
+   restart: always
+   volumes:
+     - db_data:/data/db
 
+  nginx:
+    build: ./nginx
+    container_name: nginx_server
+    ports:
+      - "80:80"
+    environment:
+      - SERVER_NAME=52.64.55.77
+    restart: always
+    depends_on:
+      - web_server
+    volumes:
+      - nginx_data:/etc/nginx/conf.d
+
+volumes:
+  web_server_data:
+  db_data:
+  nginx_data:  
